@@ -1,5 +1,6 @@
 package com.luck.horizontalslide;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +65,7 @@ public class TwoActivity extends AppCompatActivity {
                     @Override
                     public void click(int position) {
                         Toast.makeText(getBaseContext(), "点击了" + titles[position] + position, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(TwoActivity.this, ThreeActivity.class));
                     }
                 })
                 .show();

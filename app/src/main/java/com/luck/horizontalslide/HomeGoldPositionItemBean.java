@@ -3,11 +3,11 @@ package com.luck.horizontalslide;
 
 //首页金刚位，每个item的数据
 public class HomeGoldPositionItemBean {
-    public int image;
+    public String image;
     public String text;
     public String scheme;
 
-    public HomeGoldPositionItemBean(int image, String text) {
+    public HomeGoldPositionItemBean(String image, String text) {
         this.image = image;
         this.text = text;
     }
@@ -15,11 +15,11 @@ public class HomeGoldPositionItemBean {
     public HomeGoldPositionItemBean() {
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

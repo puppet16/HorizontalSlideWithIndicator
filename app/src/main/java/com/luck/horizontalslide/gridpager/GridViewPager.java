@@ -95,6 +95,8 @@ public class GridViewPager extends FrameLayout {
     // 背景颜色
     private int backgroundColor = Color.WHITE;
 
+    private int mWidth;
+
     /**
      * item点击监听
      */
@@ -498,8 +500,25 @@ public class GridViewPager extends FrameLayout {
             bgImageView.setLayoutParams(bgImageViewRl);
             backgroundImageLoaderInterface.setBackgroundImg(bgImageView);
         }
+
         // 设置数据
         setAdapter(page);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        // 获取宽-测量规则的模式和大小
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        // 获取高-测量规则的模式和大小
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        // 设置wrap_content的默认宽 / 高值
+        // 默认宽/高的设定并无固定依据,根据需要灵活设置
+        // 类似TextView,ImageView等针对wrap_content均在onMeasure()对设置默认宽 / 高值有特殊处理,具体读者可以自行查看
+        int mHeight = getAutoHeight() + mChildHeight + pointMarginPage + pointMarginBottom;
+         if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            setMeasuredDimension(widthSize, mHeight);
+        }
     }
 
     /**

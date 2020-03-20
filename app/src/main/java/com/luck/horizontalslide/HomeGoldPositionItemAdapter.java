@@ -18,7 +18,7 @@ public class HomeGoldPositionItemAdapter extends BaseQuickAdapter<HomeGoldPositi
     protected void convert(BaseViewHolder viewHolder, HomeGoldPositionItemBean item) {
         if(null == item) return;
         viewHolder.setText(R.id.tv_txt,item.text);
-        viewHolder.setImageResource(R.id.iv_icon, item.image);
+        viewHolder.setImageResource(R.id.iv_icon, Integer.valueOf(item.image));
 
     }
 }

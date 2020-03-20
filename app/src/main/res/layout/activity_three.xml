@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <com.luck.horizontalslide.gridpager.GridViewPager
+        android:id="@+id/gridviewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:background_color="@color/gray"
+        app:column_count="5"
+        app:row_count="2"
+        app:img_height="44dp"
+        app:img_width="44dp"
+        app:imgtext_margin="5dp"
+        app:pager_MarginBottom="0dp"
+        app:pager_MarginTop="16dp"
+        app:point_height="2dp"
+        app:point_is_circle="false"
+        app:point_is_show="true"
+        app:point_margin="2dp"
+        app:point_margin_bottom="10dp"
+        app:point_margin_page="10dp"
+        app:point_normal_color="@android:color/white"
+        app:point_select_color="#f00"
+        app:point_width="15dp"
+        app:text_color="#464646"
+        app:text_size="12sp"
+        app:verticalSpacing="10dp" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btu_refresh_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据变多" />
+
+    <Button
+        android:id="@+id/btu_refresh_less"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据变少" />
+
+    <Button
+        android:id="@+id/btu_one_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据只有一行" />
+
+    <Button
+        android:id="@+id/btu_two_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据有两行" />
+</LinearLayout>
