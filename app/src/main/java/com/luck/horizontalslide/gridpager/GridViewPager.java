@@ -96,6 +96,8 @@ public class GridViewPager extends FrameLayout {
     private int backgroundColor = Color.WHITE;
 
     private int mWidth;
+    //设置的列数
+    private int settingRowCount = 2;
 
     /**
      * item点击监听
@@ -177,6 +179,7 @@ public class GridViewPager extends FrameLayout {
         textImgMargin = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_imgtext_margin, AndDensityUtils.dip2px(getContext(), textImgMargin));
         rowCount = typedArray.getInt(R.styleable.GridViewPager_row_count, rowCount);
         columnCount = typedArray.getInt(R.styleable.GridViewPager_column_count, columnCount);
+        settingRowCount = rowCount;
         // 指示点
         mChildWidth = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_width, AndDensityUtils.dip2px(getContext(), mChildWidth));
         mChildHeight = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_height, AndDensityUtils.dip2px(getContext(), mChildHeight));
@@ -192,6 +195,7 @@ public class GridViewPager extends FrameLayout {
 
     /**
      * 设置数据总数
+     * 并同时计算行数，不大于设置的行数
      *
      * @param dataAllCount
      * @return
@@ -199,6 +203,16 @@ public class GridViewPager extends FrameLayout {
     public GridViewPager setDataAllCount(int dataAllCount) {
         if (dataAllCount > 0) {
             this.dataAllCount = dataAllCount;
+            if(dataAllCount < columnCount) {
+                rowCount = 1;
+            } else {
+                int temp = (int) Math.ceil(dataAllCount*1f / columnCount);
+                if(temp < settingRowCount) {
+                    rowCount = temp;
+                } else {
+                    rowCount = settingRowCount;
+                }
+            }
         }
         return this;
     }
@@ -225,6 +239,7 @@ public class GridViewPager extends FrameLayout {
     public GridViewPager setRowCount(int rowCount) {
         if (rowCount > 0) {
             this.rowCount = rowCount;
+            this.settingRowCount = rowCount;
         }
         return this;
     }
@@ -464,10 +479,8 @@ public class GridViewPager extends FrameLayout {
         rl.topMargin = pagerMarginTop;
         rl.bottomMargin = pagerMarginBottom;
         recyclerView.setLayoutParams(rl);
-        // 每页数据大小
-        pageSize = rowCount * columnCount;
         // 总页数
-        final int page = dataAllCount / pageSize + (dataAllCount % pageSize > 0 ? 1 : 0);
+        final int page = getTotalPageCount();
         // 显示指示器
         andSelectCircleView.setVisibility((mIsShow && page > 1) ? View.VISIBLE : View.GONE);
         if (mIsShow && page > 1) {
@@ -505,6 +518,21 @@ public class GridViewPager extends FrameLayout {
         setAdapter(page);
     }
 
+    /**
+     * 获取总页数
+     * @return
+     */
+    private int getTotalPageCount() {
+        // 每页数据大小
+        pageSize = rowCount * columnCount;
+        return dataAllCount / pageSize + (dataAllCount % pageSize > 0 ? 1 : 0);
+    }
+
+    /**
+     * 动态计算view高度
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -515,9 +543,9 @@ public class GridViewPager extends FrameLayout {
         // 设置wrap_content的默认宽 / 高值
         // 默认宽/高的设定并无固定依据,根据需要灵活设置
         // 类似TextView,ImageView等针对wrap_content均在onMeasure()对设置默认宽 / 高值有特殊处理,具体读者可以自行查看
-        int mHeight = getAutoHeight() + mChildHeight + pointMarginPage + pointMarginBottom;
+
          if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            setMeasuredDimension(widthSize, mHeight);
+            setMeasuredDimension(widthSize, getAllHeight());
         }
     }
 
@@ -587,7 +615,7 @@ public class GridViewPager extends FrameLayout {
      */
     private int getAllHeight() {
         // 总高
-        int page = dataAllCount / pageSize + (dataAllCount % pageSize > 0 ? 1 : 0);
+        int page = getTotalPageCount();
         int recycleviewH = getAutoHeight();
         if (mIsShow && page > 1) {
             recycleviewH += pagerMarginTop + pagerMarginBottom + pointMarginPage + pointMarginBottom + mChildHeight;
