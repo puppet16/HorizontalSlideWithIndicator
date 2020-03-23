@@ -9,18 +9,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.luck.horizontalslide.gridpager.GridViewPager;
-import com.luck.library.base.BaseActivity;
+import com.luck.horizontalslide.gridpager.GridViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.OnClick;
 
 
 /**
@@ -71,7 +67,7 @@ public class ThreeActivity extends Activity implements View.OnClickListener{
                 // 设置数据总数量
                 .setDataAllCount(mHomeGoldPositionItemBeanList.size())
                 // 数据绑定
-                .setImageTextLoaderInterface(new GridViewPager.ImageTextLoaderInterface() {
+                .setImageTextLoaderCallback(new GridViewPagerAdapter.ImageTextLoaderCallback() {
                     @Override
                     public void displayImageText(ImageView imageView, TextView textView, int position) {
                         // 自己进行数据的绑定，灵活度更高，不受任何限制
@@ -81,9 +77,9 @@ public class ThreeActivity extends Activity implements View.OnClickListener{
                     }
                 })
                 // Item点击
-                .setGridItemClickListener(new GridViewPager.GridItemClickListener() {
+                .setGridItemClickListener(new GridViewPagerAdapter.GridItemClickListener() {
                     @Override
-                    public void click(int position) {
+                    public void itemClick(int position) {
                         Toast.makeText(getBaseContext(), "点击了" + mHomeGoldPositionItemBeanList.get(position).getText() + position, Toast.LENGTH_SHORT).show();
                     }
                 })

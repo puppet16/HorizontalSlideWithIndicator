@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.luck.horizontalslide.gridpager.GridViewPager;
+import com.luck.horizontalslide.gridpager.GridViewPagerAdapter;
 
 
 /**
@@ -52,7 +53,7 @@ public class TwoActivity extends AppCompatActivity {
                     }
                 })
                 // 数据绑定
-                .setImageTextLoaderInterface(new GridViewPager.ImageTextLoaderInterface() {
+                .setImageTextLoaderCallback(new GridViewPagerAdapter.ImageTextLoaderCallback() {
                     @Override
                     public void displayImageText(ImageView imageView, TextView textView, int position) {
                         // 自己进行数据的绑定，灵活度更高，不受任何限制
@@ -61,9 +62,9 @@ public class TwoActivity extends AppCompatActivity {
                     }
                 })
                 // Item点击
-                .setGridItemClickListener(new GridViewPager.GridItemClickListener() {
+                .setGridItemClickListener(new GridViewPagerAdapter.GridItemClickListener() {
                     @Override
-                    public void click(int position) {
+                    public void itemClick(int position) {
                         Toast.makeText(getBaseContext(), "点击了" + titles[position] + position, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(TwoActivity.this, ThreeActivity.class));
                     }
@@ -80,7 +81,7 @@ public class TwoActivity extends AppCompatActivity {
                     titles[i] = titles[i] + "_1";
                 }
                 // 刷新
-                gridViewPager.setDataAllCount(titles.length).setRowCount(3).setColumnCount(3).show();
+                gridViewPager.setDataAllCount(titles.length).setRowCount(3).setColCount(3).show();
             }
         });
 
@@ -102,11 +103,11 @@ public class TwoActivity extends AppCompatActivity {
                 // 设置下边距
                 .setPagerMarginBottom(10)
                 // 设置图片宽度
-                .setImageWidth(50)
+                .setIconWidth(50)
                 // 设置图片高度
-                .setImageHeight(50)
+                .setIconHeight(50)
                 // 设置文字与图片的间距
-                .setTextImgMargin(5)
+                .setTextIconMargin(5)
                 // 设置文字颜色
                 .setTextColor(ContextCompat.getColor(getBaseContext(), android.R.color.white))
                 // 设置文字大小
@@ -114,25 +115,25 @@ public class TwoActivity extends AppCompatActivity {
                 // 设置每页行数
                 .setRowCount(rowCount)
                 // 设置每页列数
-                .setColumnCount(columnCount)
+                .setColCount(columnCount)
                 // 设置是否显示指示器
-                .setPointIsShow(true)
+                .setIndicatorIsDisplay(true)
                 // 设置指示器与page的间距
-                .setPointMarginPage(10)
+                .setIndicatorMarginTop(10)
                 // 设置指示器与底部的间距
-                .setPointMarginBottom(10)
+                .setIndicatorMarginBottom(10)
                 // 设置指示器的item宽度
                 .setPointChildWidth(8)
                 // 设置指示器的item高度
-                .setPointChildHeight(8)
+                .setIndicatorChildHeight(8)
                 // 设置指示器的item的间距
-                .setPointChildMargin(8)
+                .setIndicatorChildMargin(8)
                 // 指示器的item是否为圆形，默认圆形直径取宽高的最小值
-                .setPointIsCircle(true)
+                .setIndicatorIsCircle(true)
                 // 指示器item未选中的颜色
-                .setPointNormalColor(ContextCompat.getColor(getBaseContext(), android.R.color.white))
+                .setIndicatorNormalColor(ContextCompat.getColor(getBaseContext(), android.R.color.white))
                 // 指示器item选中的颜色
-                .setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.black_text))
+                .setIndicatorSelectColor(ContextCompat.getColor(getBaseContext(), R.color.black_text))
                 // 设置背景图片(此时设置的背景色无效，以背景图片为主)
                 .setBackgroundImageLoader(new GridViewPager.BackgroundImageLoaderInterface() {
                     @Override
@@ -141,7 +142,7 @@ public class TwoActivity extends AppCompatActivity {
                     }
                 })
                 // 数据绑定
-                .setImageTextLoaderInterface(new GridViewPager.ImageTextLoaderInterface() {
+                .setImageTextLoaderCallback(new GridViewPagerAdapter.ImageTextLoaderCallback() {
                     @Override
                     public void displayImageText(ImageView imageView, TextView textView, int position) {
                         // 自己进行数据的绑定，灵活度更高，不受任何限制
@@ -150,9 +151,9 @@ public class TwoActivity extends AppCompatActivity {
                     }
                 })
                 // Item点击
-                .setGridItemClickListener(new GridViewPager.GridItemClickListener() {
+                .setGridItemClickListener(new GridViewPagerAdapter.GridItemClickListener() {
                     @Override
-                    public void click(int position) {
+                    public void itemClick(int position) {
                         Toast.makeText(getBaseContext(), "点击了" + titles2[position] + position, Toast.LENGTH_SHORT).show();
                     }
                 })

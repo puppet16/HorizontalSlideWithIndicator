@@ -3,61 +3,62 @@
 
     <declare-styleable name="GridViewPager">
         <!--下间距-->
-        <attr name="pager_MarginTop" format="dimension"></attr>
+        <attr name="pager_marginTop" format="dimension" />
         <!--上间距-->
-        <attr name="pager_MarginBottom" format="dimension"></attr>
+        <attr name="pager_marginBottom" format="dimension" />
         <!--背景颜色-->
-        <attr name="background_color" format="color|reference"></attr>
+        <attr name="page_backgroundColor" format="color|reference" />
         <!--竖直方向的间距-->
-        <attr name="verticalSpacing" format="dimension"></attr>
+        <attr name="page_verticalSpacing" format="dimension" />
         <!--icon 宽度-->
-        <attr name="img_width" format="dimension" />
+        <attr name="page_imgWidth" format="dimension" />
         <!--icon 高度-->
-        <attr name="img_height" format="dimension"></attr>
+        <attr name="page_imgHeight" format="dimension" />
         <!--文字颜色-->
-        <attr name="text_color" format="color|reference"></attr>
+        <attr name="page_textColor" format="color|reference" />
         <!--文字大小-->
-        <attr name="text_size" format="dimension"></attr>
+        <attr name="page_textSize" format="dimension" />
         <!--文字与icon的间距-->
-        <attr name="imgtext_margin" format="dimension"></attr>
+        <attr name="page_imgTextMargin" format="dimension" />
         <!--行数-->
-        <attr name="row_count" format="integer"></attr>
+        <attr name="page_rowCount" format="integer" />
         <!--列数-->
-        <attr name="column_count" format="integer"></attr>
+        <attr name="page_colCount" format="integer" />
 
         <!--指示点配置-->
         <!-- 设置子控件显示的宽度 -->
-        <attr name="point_width" format="dimension" />
+        <attr name="indicator_childWidth" format="dimension" />
         <!-- 设置子控件显示的高度 -->
-        <attr name="point_height" format="dimension"></attr>
+        <attr name="indicator_childHeight" format="dimension" />
         <!-- 设置子控件之间的间距 -->
-        <attr name="point_margin" format="dimension"></attr>
+        <attr name="indicator_childMargin" format="dimension" />
         <!-- 正常情况下显示的颜色 -->
-        <attr name="point_normal_color" format="color|reference"></attr>
+        <attr name="indicator_normalColor" format="color|reference" />
         <!-- 选中的时候显示的颜色 -->
-        <attr name="point_select_color" format="color|reference"></attr>
+        <attr name="indicator_selectColor" format="color|reference" />
         <!-- 子空间是否显示为圆形，默认为true，此时控件的大小为宽和高中的最小值 -->
-        <attr name="point_is_circle" format="boolean"></attr>
+        <attr name="indicator_isCircle" format="boolean" />
         <!-- 设置指示器与page的间距 -->
-        <attr name="point_margin_page" format="dimension"></attr>
+        <attr name="indicator_marginTop" format="dimension" />
         <!-- 设置指示器与底部的间距 -->
-        <attr name="point_margin_bottom" format="dimension"></attr>
+        <attr name="indicator_marginBottom" format="dimension" />
         <!-- 是否展示指示器 -->
-        <attr name="point_is_show" format="boolean"></attr>
+        <attr name="indicator_isDisplay" format="boolean" />
+
     </declare-styleable>
 
-    <declare-styleable name="AndSelectCircleView">
+    <declare-styleable name="IndicatorViewForGridPage">
         <!-- 设置子控件显示的宽度 -->
-        <attr name="child_width" format="dimension" />
+        <attr name="childWidth" format="dimension" />
         <!-- 设置子控件显示的高度 -->
-        <attr name="child_height" format="dimension"></attr>
+        <attr name="childHeight" format="dimension"/>
         <!-- 设置子控件之间的间距 -->
-        <attr name="child_margin" format="dimension"></attr>
+        <attr name="childMargin" format="dimension"/>
         <!-- 子空间是否显示为圆形，默认为true，此时控件的大小为宽和高中的最小值 -->
-        <attr name="is_circle" format="boolean"></attr>
+        <attr name="isCircle" format="boolean"/>
         <!-- 正常情况下显示的颜色 -->
-        <attr name="normal_color" format="color|reference"></attr>
+        <attr name="normalColor" format="color|reference"/>
         <!-- 选中的时候显示的颜色 -->
-        <attr name="select_color" format="color|reference"></attr>
+        <attr name="selectColor" format="color|reference"/>
     </declare-styleable>
 </resources>

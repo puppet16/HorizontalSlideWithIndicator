@@ -31,9 +31,9 @@ import java.security.InvalidParameterException;
  * @author yuan
  */
 @SuppressLint("Recycle")
-public class AndSelectCircleView extends RadioGroup {
+public class IndicatorView extends RadioGroup {
 
-    private static final String tag = AndSelectCircleView.class.getSimpleName();
+    private static final String tag = IndicatorView.class.getSimpleName();
     //默认的子控件的大小，单位是dp
     private static final int DEAFULT_CHILD_SIZE = 8;
     //默认情况下子控件之间的间距，单位是dp
@@ -61,17 +61,17 @@ public class AndSelectCircleView extends RadioGroup {
     //
     private PointCheckedChangeListener pointCheckedChangeListener;
 
-    public AndSelectCircleView(Context context, AttributeSet attrs) {
+    public IndicatorView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER);
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.AndSelectCircleView);
-        mChildWidth = attributes.getDimensionPixelSize(R.styleable.AndSelectCircleView_child_width, AndDensityUtils.dip2px(context, DEAFULT_CHILD_SIZE));
-        mChildHeight = attributes.getDimensionPixelSize(R.styleable.AndSelectCircleView_child_height, AndDensityUtils.dip2px(context, DEAFULT_CHILD_SIZE));
-        mChildMargin = attributes.getDimensionPixelSize(R.styleable.AndSelectCircleView_child_margin, AndDensityUtils.dip2px(context, DEFAULT_CHILD_MARGIN));
-        mIsCircle = attributes.getBoolean(R.styleable.AndSelectCircleView_is_circle, true);
-        mNormalColor = attributes.getColor(R.styleable.AndSelectCircleView_normal_color, DEFAULT_NORMAL_COLOR);
-        mSelectColor = attributes.getColor(R.styleable.AndSelectCircleView_select_color, DEFAULT_SELECT_COLOR);
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.IndicatorViewForGridPage);
+        mChildWidth = attributes.getDimensionPixelSize(R.styleable.IndicatorViewForGridPage_childWidth, AndDensityUtils.dip2px(context, DEAFULT_CHILD_SIZE));
+        mChildHeight = attributes.getDimensionPixelSize(R.styleable.IndicatorViewForGridPage_childHeight, AndDensityUtils.dip2px(context, DEAFULT_CHILD_SIZE));
+        mChildMargin = attributes.getDimensionPixelSize(R.styleable.IndicatorViewForGridPage_childMargin, AndDensityUtils.dip2px(context, DEFAULT_CHILD_MARGIN));
+        mIsCircle = attributes.getBoolean(R.styleable.IndicatorViewForGridPage_isCircle, true);
+        mNormalColor = attributes.getColor(R.styleable.IndicatorViewForGridPage_normalColor, DEFAULT_NORMAL_COLOR);
+        mSelectColor = attributes.getColor(R.styleable.IndicatorViewForGridPage_selectColor, DEFAULT_SELECT_COLOR);
         attributes.recycle();
     }
 
@@ -95,7 +95,7 @@ public class AndSelectCircleView extends RadioGroup {
         return bitmap;
     }
 
-    public AndSelectCircleView(Context context) {
+    public IndicatorView(Context context) {
         super(context);
         setOrientation(LinearLayout.HORIZONTAL);
         initView();
@@ -116,37 +116,37 @@ public class AndSelectCircleView extends RadioGroup {
      * @param mChildWidth
      * @return
      */
-    public AndSelectCircleView setmChildWidth(int mChildWidth) {
+    public IndicatorView setChildWidth(int mChildWidth) {
         this.mChildWidth = mChildWidth;
         return this;
     }
 
-    public AndSelectCircleView setmChildHeight(int mChildHeight) {
+    public IndicatorView setChildHeight(int mChildHeight) {
         this.mChildHeight = mChildHeight;
         return this;
     }
 
-    public AndSelectCircleView setmIsCircle(boolean mIsCircle) {
+    public IndicatorView setIsCircle(boolean mIsCircle) {
         this.mIsCircle = mIsCircle;
         return this;
     }
 
-    public AndSelectCircleView setmChildMargin(int mChildMargin) {
+    public IndicatorView setChildMargin(int mChildMargin) {
         this.mChildMargin = mChildMargin;
         return this;
     }
 
-    public AndSelectCircleView setmNormalColor(int mNormalColor) {
+    public IndicatorView setNormalColor(int mNormalColor) {
         this.mNormalColor = mNormalColor;
         return this;
     }
 
-    public AndSelectCircleView setmSelectColor(int mSelectColor) {
+    public IndicatorView setSelectColor(int mSelectColor) {
         this.mSelectColor = mSelectColor;
         return this;
     }
 
-    public AndSelectCircleView setPointCheckedChangeListener(PointCheckedChangeListener pointCheckedChangeListener) {
+    public IndicatorView setPointCheckedChangeListener(PointCheckedChangeListener pointCheckedChangeListener) {
         this.pointCheckedChangeListener = pointCheckedChangeListener;
         return this;
     }

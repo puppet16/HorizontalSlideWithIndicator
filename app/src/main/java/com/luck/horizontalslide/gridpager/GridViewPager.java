@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,9 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.google.android.flexbox.FlexboxLayout;
 import com.luck.horizontalslide.R;
 
 import java.util.ArrayList;
@@ -36,75 +30,73 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING;
  */
 public class GridViewPager extends FrameLayout {
 
-    private RecyclerView recyclerView;
-    private ImageView bgImageView;
+    private RecyclerView mRvPage;
+    private ImageView mIvBg;
 
-    private GridViewPagerAdapter pagerAdapter;
-    private LinearLayoutManager linearLayoutManager;
+    private GridViewPagerAdapter mPagerAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+
+    /**
+     * 列表
+     */
+    //子控件显示的宽度
+    private int mIndicatorChildWidth = 8;
+    //子控件显示的高度
+    private int mIndicatorChildHeight = 8;
+    //两个子控件之间的间距
+    private int mIndicatorChildMargin = 8;
+    //正常情况下显示的颜色
+    private int mIndicatorChildNormalColor = Color.GRAY;
+    //选中的时候现实的颜色
+    private int mIndicatorChildSelectColor = Color.RED;
+    // 是否是圆形的指示点
+    private boolean mIndicatorChildIsCircle = true;
+    // 是否需要显示指示器
+    private boolean mIsDisplayIndicator = true;
+    // 指示器与page间距
+    private int mIndicatorMarginTop = 10;
+    // 指示器与底部间距
+    private int mIndicatorMarginBottom = 10;
+
     /**
      * 指示点
      */
-    private AndSelectCircleView andSelectCircleView;
-    //子控件显示的宽度
-    private int mChildWidth = 8;
-    //子控件显示的高度
-    private int mChildHeight = 8;
-    //两个子控件之间的间距
-    private int mChildMargin = 8;
-    //正常情况下显示的颜色
-    private int mNormalColor = Color.GRAY;
-    //选中的时候现实的颜色
-    private int mSelectColor = Color.RED;
-    // 是否是圆形的指示点
-    private boolean mIsCircle = true;
-    // 是否需要显示指示器
-    private boolean mIsShow = true;
-    // 指示器与page间距
-    private int pointMarginPage = 10;
-    // 指示器与底部间距
-    private int pointMarginBottom = 10;
-
-    /**
-     * GridViewPager
-     */
-    // 数据列表
+    private IndicatorView mIndicatorView;
     // page上间距
-    private int pagerMarginTop = 10;
+    private int mPagerMarginTop = 10;
     // page下间距
-    private int pagerMarginBottom = 10;
+    private int mPagerMarginBottom = 10;
     // 行间距间距
-    private int verticalSpacing = 10;
+    private int mVerticalSpacing = 10;
     // icon 宽度
-    private int imageWidth = 50;
+    private int mIconWidth = 50;
     // icon 高度
-    private int imageHeight = 50;
+    private int mIconHeight = 50;
     // 文字颜色
-    private int textColor = Color.BLACK;
+    private int mTextColor = Color.BLACK;
     // 文字大小
-    private int textSize = 10;
+    private int mTextSize = 10;
     // icon 文字 的间距
-    private int textImgMargin = 5;
+    private int mTextIconMargin = 5;
     // 行数
-    private int rowCount = 2;
+    private int mRowCount = 2;
     // 列数
-    private int columnCount = 4;
+    private int mColCount = 4;
     // 每页大小
-    private int pageSize = 8;
+    private int mPageSize = 8;
     // 数据总数
-    private int dataAllCount = 0;
+    private int mDataAllCount = 0;
     // 背景颜色
-    private int backgroundColor = Color.WHITE;
-
-    private int mWidth;
+    private int mBackgroundColor = Color.WHITE;
     //设置的列数
-    private int settingRowCount = 2;
+    private int mSettingRowCount = 2;
 
     /**
      * item点击监听
      */
-    private GridItemClickListener gridItemClickListener;
+    private GridViewPagerAdapter.GridItemClickListener mGridItemClickListener;
 
-    private ImageTextLoaderInterface imageTextLoaderInterface;
+    private GridViewPagerAdapter.ImageTextLoaderCallback mImageTextLoaderInterface;
 
     private BackgroundImageLoaderInterface backgroundImageLoaderInterface;
 
@@ -118,9 +110,9 @@ public class GridViewPager extends FrameLayout {
 
     public GridViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        handleTypedArray(context, attrs);
+        handleTypedArray(attrs);
         initView();
-        setBackgroundColor(backgroundColor);
+        setBackgroundColor(mBackgroundColor);
     }
 
     /**
@@ -128,19 +120,19 @@ public class GridViewPager extends FrameLayout {
      */
     private void initView() {
         View view = View.inflate(getContext(), R.layout.gridpager_layout, null);
-        bgImageView = view.findViewById(R.id.iv_bg);
-        recyclerView = view.findViewById(R.id.recycleview);
-        andSelectCircleView = view.findViewById(R.id.scv);
+        mIvBg = view.findViewById(R.id.iv_bg);
+        mRvPage = view.findViewById(R.id.recycleview);
+        mIndicatorView = view.findViewById(R.id.scv);
         addView(view);
         // 设置分页滑动
         PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
-        pagerSnapHelper.attachToRecyclerView(recyclerView);
+        pagerSnapHelper.attachToRecyclerView(mRvPage);
         //
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRvPage.setLayoutManager(mLinearLayoutManager);
         // 滚动监听
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRvPage.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -148,8 +140,8 @@ public class GridViewPager extends FrameLayout {
                     case SCROLL_STATE_IDLE:
                         // recyclerview已经停止滚动
                         // 设置指示点
-                        int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                        andSelectCircleView.setSelectPosition(firstVisibleItem);
+                        int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+                        mIndicatorView.setSelectPosition(firstVisibleItem);
                         break;
                     case SCROLL_STATE_DRAGGING:
                         // recyclerview正在被拖拽
@@ -162,34 +154,38 @@ public class GridViewPager extends FrameLayout {
         });
     }
 
-
-    private void handleTypedArray(Context context, AttributeSet attrs) {
+    /**
+     * 初始化参数
+     *
+     * @param attrs
+     */
+    private void handleTypedArray(AttributeSet attrs) {
         if (attrs == null) {
             return;
         }
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GridViewPager);
-        pagerMarginTop = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_pager_MarginTop, AndDensityUtils.dip2px(getContext(), pagerMarginTop));
-        pagerMarginBottom = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_pager_MarginBottom, AndDensityUtils.dip2px(getContext(), pagerMarginBottom));
-        verticalSpacing = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_verticalSpacing, AndDensityUtils.dip2px(getContext(), verticalSpacing));
-        backgroundColor = typedArray.getColor(R.styleable.GridViewPager_background_color, Color.WHITE);
-        imageWidth = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_img_width, AndDensityUtils.dip2px(getContext(), imageWidth));
-        imageHeight = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_img_height, AndDensityUtils.dip2px(getContext(), imageHeight));
-        textColor = typedArray.getColor(R.styleable.GridViewPager_text_color, Color.BLACK);
-        textSize = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_text_size, AndDensityUtils.sp2px(getContext(), textSize));
-        textImgMargin = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_imgtext_margin, AndDensityUtils.dip2px(getContext(), textImgMargin));
-        rowCount = typedArray.getInt(R.styleable.GridViewPager_row_count, rowCount);
-        columnCount = typedArray.getInt(R.styleable.GridViewPager_column_count, columnCount);
-        settingRowCount = rowCount;
-        // 指示点
-        mChildWidth = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_width, AndDensityUtils.dip2px(getContext(), mChildWidth));
-        mChildHeight = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_height, AndDensityUtils.dip2px(getContext(), mChildHeight));
-        mChildMargin = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_margin, AndDensityUtils.dip2px(getContext(), mChildMargin));
-        mNormalColor = typedArray.getColor(R.styleable.GridViewPager_point_normal_color, Color.GRAY);
-        mSelectColor = typedArray.getColor(R.styleable.GridViewPager_point_select_color, Color.RED);
-        mIsCircle = typedArray.getBoolean(R.styleable.GridViewPager_point_is_circle, true);
-        mIsShow = typedArray.getBoolean(R.styleable.GridViewPager_point_is_show, true);
-        pointMarginPage = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_margin_page, verticalSpacing);
-        pointMarginBottom = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_point_margin_bottom, verticalSpacing);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.GridViewPager);
+        mPagerMarginTop = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_pager_marginTop, AndDensityUtils.dip2px(getContext(), mPagerMarginTop));
+        mPagerMarginBottom = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_pager_marginBottom, AndDensityUtils.dip2px(getContext(), mPagerMarginBottom));
+        mVerticalSpacing = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_page_verticalSpacing, AndDensityUtils.dip2px(getContext(), mVerticalSpacing));
+        mBackgroundColor = typedArray.getColor(R.styleable.GridViewPager_page_backgroundColor, Color.WHITE);
+        mIconWidth = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_page_imgWidth, AndDensityUtils.dip2px(getContext(), mIconWidth));
+        mIconHeight = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_page_imgHeight, AndDensityUtils.dip2px(getContext(), mIconHeight));
+        mTextColor = typedArray.getColor(R.styleable.GridViewPager_page_textColor, Color.BLACK);
+        mTextSize = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_page_textSize, AndDensityUtils.sp2px(getContext(), mTextSize));
+        mTextIconMargin = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_page_imgTextMargin, AndDensityUtils.dip2px(getContext(), mTextIconMargin));
+        mRowCount = typedArray.getInt(R.styleable.GridViewPager_page_rowCount, mRowCount);
+        mColCount = typedArray.getInt(R.styleable.GridViewPager_page_colCount, mColCount);
+        mSettingRowCount = mRowCount;
+        // 指示器
+        mIndicatorChildWidth = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_indicator_childWidth, AndDensityUtils.dip2px(getContext(), mIndicatorChildWidth));
+        mIndicatorChildHeight = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_indicator_childHeight, AndDensityUtils.dip2px(getContext(), mIndicatorChildHeight));
+        mIndicatorChildMargin = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_indicator_childMargin, AndDensityUtils.dip2px(getContext(), mIndicatorChildMargin));
+        mIndicatorChildNormalColor = typedArray.getColor(R.styleable.GridViewPager_indicator_normalColor, Color.GRAY);
+        mIndicatorChildSelectColor = typedArray.getColor(R.styleable.GridViewPager_indicator_selectColor, Color.RED);
+        mIndicatorChildIsCircle = typedArray.getBoolean(R.styleable.GridViewPager_indicator_isCircle, true);
+        mIsDisplayIndicator = typedArray.getBoolean(R.styleable.GridViewPager_indicator_isDisplay, true);
+        mIndicatorMarginTop = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_indicator_marginTop, mVerticalSpacing);
+        mIndicatorMarginBottom = typedArray.getDimensionPixelSize(R.styleable.GridViewPager_indicator_marginBottom, mVerticalSpacing);
         typedArray.recycle();
     }
 
@@ -197,20 +193,20 @@ public class GridViewPager extends FrameLayout {
      * 设置数据总数
      * 并同时计算行数，不大于设置的行数
      *
-     * @param dataAllCount
+     * @param mDataAllCount
      * @return
      */
-    public GridViewPager setDataAllCount(int dataAllCount) {
-        if (dataAllCount > 0) {
-            this.dataAllCount = dataAllCount;
-            if(dataAllCount < columnCount) {
-                rowCount = 1;
+    public GridViewPager setDataAllCount(int mDataAllCount) {
+        if (mDataAllCount > 0) {
+            this.mDataAllCount = mDataAllCount;
+            if (mDataAllCount < mColCount) {
+                mRowCount = 1;
             } else {
-                int temp = (int) Math.ceil(dataAllCount*1f / columnCount);
-                if(temp < settingRowCount) {
-                    rowCount = temp;
+                int temp = (int) Math.ceil(mDataAllCount * 1f / mColCount);
+                if (temp < mSettingRowCount) {
+                    mRowCount = temp;
                 } else {
-                    rowCount = settingRowCount;
+                    mRowCount = mSettingRowCount;
                 }
             }
         }
@@ -220,12 +216,12 @@ public class GridViewPager extends FrameLayout {
     /**
      * 设置列数
      *
-     * @param columnCount
+     * @param mColCount
      * @return
      */
-    public GridViewPager setColumnCount(int columnCount) {
-        if (columnCount > 0) {
-            this.columnCount = columnCount;
+    public GridViewPager setColCount(int mColCount) {
+        if (mColCount > 0) {
+            this.mColCount = mColCount;
         }
         return this;
     }
@@ -233,13 +229,13 @@ public class GridViewPager extends FrameLayout {
     /**
      * 设置行数
      *
-     * @param rowCount
+     * @param mRowCount
      * @return
      */
-    public GridViewPager setRowCount(int rowCount) {
-        if (rowCount > 0) {
-            this.rowCount = rowCount;
-            this.settingRowCount = rowCount;
+    public GridViewPager setRowCount(int mRowCount) {
+        if (mRowCount > 0) {
+            this.mRowCount = mRowCount;
+            this.mSettingRowCount = mRowCount;
         }
         return this;
     }
@@ -247,59 +243,59 @@ public class GridViewPager extends FrameLayout {
     /**
      * 上下边距
      *
-     * @param pagerMarginTop
+     * @param mPagerMarginTop
      */
-    public GridViewPager setPagerMarginTop(int pagerMarginTop) {
-        this.pagerMarginTop = AndDensityUtils.dip2px(getContext(), pagerMarginTop);
+    public GridViewPager setPagerMarginTop(int mPagerMarginTop) {
+        this.mPagerMarginTop = AndDensityUtils.dip2px(getContext(), mPagerMarginTop);
         return this;
     }
 
-    public GridViewPager setPagerMarginBottom(int pagerMarginBottom) {
-        this.pagerMarginBottom = AndDensityUtils.dip2px(getContext(), pagerMarginBottom);
+    public GridViewPager setPagerMarginBottom(int mPagerMarginBottom) {
+        this.mPagerMarginBottom = AndDensityUtils.dip2px(getContext(), mPagerMarginBottom);
         return this;
     }
 
     /**
      * 设置 纵向间距
      *
-     * @param verticalSpacing
+     * @param mVerticalSpacing
      * @return
      */
-    public GridViewPager setVerticalSpacing(int verticalSpacing) {
-        this.verticalSpacing = AndDensityUtils.dip2px(getContext(), verticalSpacing);
+    public GridViewPager setVerticalSpacing(int mVerticalSpacing) {
+        this.mVerticalSpacing = AndDensityUtils.dip2px(getContext(), mVerticalSpacing);
         return this;
     }
 
     /**
      * 设置 icon 宽度
      *
-     * @param imageWidth
+     * @param mIconWidth
      * @return
      */
-    public GridViewPager setImageWidth(int imageWidth) {
-        this.imageWidth = AndDensityUtils.dip2px(getContext(), imageWidth);
+    public GridViewPager setIconWidth(int mIconWidth) {
+        this.mIconWidth = AndDensityUtils.dip2px(getContext(), mIconWidth);
         return this;
     }
 
     /**
      * 设置 icon 高度
      *
-     * @param imageHeight
+     * @param mIconHeight
      * @return
      */
-    public GridViewPager setImageHeight(int imageHeight) {
-        this.imageHeight = AndDensityUtils.dip2px(getContext(), imageHeight);
+    public GridViewPager setIconHeight(int mIconHeight) {
+        this.mIconHeight = AndDensityUtils.dip2px(getContext(), mIconHeight);
         return this;
     }
 
     /**
      * 设置 字体颜色
      *
-     * @param textColor
+     * @param mTextColor
      * @return
      */
-    public GridViewPager setTextColor(int textColor) {
-        this.textColor = textColor;
+    public GridViewPager setTextColor(int mTextColor) {
+        this.mTextColor = mTextColor;
         return this;
     }
 
@@ -317,22 +313,22 @@ public class GridViewPager extends FrameLayout {
     /**
      * 设置字体大小
      *
-     * @param textSize
+     * @param mTextSize
      * @return
      */
-    public GridViewPager setTextSize(int textSize) {
-        this.textSize = AndDensityUtils.sp2px(getContext(), textSize);
+    public GridViewPager setTextSize(int mTextSize) {
+        this.mTextSize = AndDensityUtils.sp2px(getContext(), mTextSize);
         return this;
     }
 
     /**
      * 设置字体与icon的间距
      *
-     * @param textImgMargin
+     * @param mTextIconMargin
      * @return
      */
-    public GridViewPager setTextImgMargin(int textImgMargin) {
-        this.textImgMargin = AndDensityUtils.dip2px(getContext(), textImgMargin);
+    public GridViewPager setTextIconMargin(int mTextIconMargin) {
+        this.mTextIconMargin = AndDensityUtils.dip2px(getContext(), mTextIconMargin);
         return this;
     }
 
@@ -343,7 +339,7 @@ public class GridViewPager extends FrameLayout {
      * @return
      */
     public GridViewPager setPointChildWidth(int mChildWidth) {
-        this.mChildWidth = AndDensityUtils.dip2px(getContext(), mChildWidth);
+        this.mIndicatorChildWidth = AndDensityUtils.dip2px(getContext(), mChildWidth);
         return this;
     }
 
@@ -353,8 +349,8 @@ public class GridViewPager extends FrameLayout {
      * @param mChildHeight
      * @return
      */
-    public GridViewPager setPointChildHeight(int mChildHeight) {
-        this.mChildHeight = AndDensityUtils.dip2px(getContext(), mChildHeight);
+    public GridViewPager setIndicatorChildHeight(int mChildHeight) {
+        this.mIndicatorChildHeight = AndDensityUtils.dip2px(getContext(), mChildHeight);
         return this;
     }
 
@@ -364,8 +360,8 @@ public class GridViewPager extends FrameLayout {
      * @param mChildMargin
      * @return
      */
-    public GridViewPager setPointChildMargin(int mChildMargin) {
-        this.mChildMargin = AndDensityUtils.dip2px(getContext(), mChildMargin);
+    public GridViewPager setIndicatorChildMargin(int mChildMargin) {
+        this.mIndicatorChildMargin = AndDensityUtils.dip2px(getContext(), mChildMargin);
         return this;
     }
 
@@ -375,8 +371,8 @@ public class GridViewPager extends FrameLayout {
      * @param mIsCircle
      * @return
      */
-    public GridViewPager setPointIsCircle(boolean mIsCircle) {
-        this.mIsCircle = mIsCircle;
+    public GridViewPager setIndicatorIsCircle(boolean mIsCircle) {
+        this.mIndicatorChildIsCircle = mIsCircle;
         return this;
     }
 
@@ -386,8 +382,8 @@ public class GridViewPager extends FrameLayout {
      * @param mNormalColor
      * @return
      */
-    public GridViewPager setPointNormalColor(int mNormalColor) {
-        this.mNormalColor = mNormalColor;
+    public GridViewPager setIndicatorNormalColor(int mNormalColor) {
+        this.mIndicatorChildNormalColor = mNormalColor;
         return this;
     }
 
@@ -397,51 +393,51 @@ public class GridViewPager extends FrameLayout {
      * @param mSelectColor
      * @return
      */
-    public GridViewPager setPointSelectColor(int mSelectColor) {
-        this.mSelectColor = mSelectColor;
+    public GridViewPager setIndicatorSelectColor(int mSelectColor) {
+        this.mIndicatorChildSelectColor = mSelectColor;
         return this;
     }
 
     /**
      * 设置指示器是否显示
      *
-     * @param mIsShow
+     * @param mIsDisplay
      * @return
      */
-    public GridViewPager setPointIsShow(boolean mIsShow) {
-        this.mIsShow = mIsShow;
+    public GridViewPager setIndicatorIsDisplay(boolean mIsDisplay) {
+        this.mIsDisplayIndicator = mIsDisplay;
         return this;
     }
 
     /**
      * 设置指示器与page的间距
      *
-     * @param pointMarginPage
+     * @param mIndicatorMarginTop
      * @return
      */
-    public GridViewPager setPointMarginPage(int pointMarginPage) {
-        this.pointMarginPage = AndDensityUtils.dip2px(getContext(), pointMarginPage);
+    public GridViewPager setIndicatorMarginTop(int mIndicatorMarginTop) {
+        this.mIndicatorMarginTop = AndDensityUtils.dip2px(getContext(), mIndicatorMarginTop);
         return this;
     }
 
     /**
      * 设置指示器与底部的间距
      *
-     * @param pointMarginBottom
+     * @param mIndicatorMarginBottom
      * @return
      */
-    public GridViewPager setPointMarginBottom(int pointMarginBottom) {
-        this.pointMarginBottom = AndDensityUtils.dip2px(getContext(), pointMarginBottom);
+    public GridViewPager setIndicatorMarginBottom(int mIndicatorMarginBottom) {
+        this.mIndicatorMarginBottom = AndDensityUtils.dip2px(getContext(), mIndicatorMarginBottom);
         return this;
     }
 
     /**
      * 设置 Item 点击监听
      *
-     * @param gridItemClickListener
+     * @param mGridItemClickListener
      */
-    public GridViewPager setGridItemClickListener(GridItemClickListener gridItemClickListener) {
-        this.gridItemClickListener = gridItemClickListener;
+    public GridViewPager setGridItemClickListener(GridViewPagerAdapter.GridItemClickListener mGridItemClickListener) {
+        this.mGridItemClickListener = mGridItemClickListener;
         return this;
     }
 
@@ -451,8 +447,8 @@ public class GridViewPager extends FrameLayout {
      *
      * @param imageTextLoaderInterface
      */
-    public GridViewPager setImageTextLoaderInterface(ImageTextLoaderInterface imageTextLoaderInterface) {
-        this.imageTextLoaderInterface = imageTextLoaderInterface;
+    public GridViewPager setImageTextLoaderCallback(GridViewPagerAdapter.ImageTextLoaderCallback imageTextLoaderInterface) {
+        this.mImageTextLoaderInterface = imageTextLoaderInterface;
         return this;
     }
 
@@ -471,37 +467,37 @@ public class GridViewPager extends FrameLayout {
      * 显示
      */
     public void show() {
-        if (dataAllCount == 0) {
+        if (mDataAllCount == 0) {
             return;
         }
         // 设置高度
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getAutoHeight());
-        rl.topMargin = pagerMarginTop;
-        rl.bottomMargin = pagerMarginBottom;
-        recyclerView.setLayoutParams(rl);
+        rl.topMargin = mPagerMarginTop;
+        rl.bottomMargin = mPagerMarginBottom;
+        mRvPage.setLayoutParams(rl);
         // 总页数
         final int page = getTotalPageCount();
         // 显示指示器
-        andSelectCircleView.setVisibility((mIsShow && page > 1) ? View.VISIBLE : View.GONE);
-        if (mIsShow && page > 1) {
-            RelativeLayout.LayoutParams pointParams = (RelativeLayout.LayoutParams) andSelectCircleView.getLayoutParams();
-            pointParams.topMargin = pointMarginPage;
-            pointParams.bottomMargin = pointMarginBottom;
-            andSelectCircleView.setLayoutParams(pointParams);
-            // 设置指示点
-            andSelectCircleView
-                    .setmChildWidth(mChildWidth)
-                    .setmChildHeight(mChildHeight)
-                    .setmChildMargin(mChildMargin)
-                    .setmIsCircle(mIsCircle)
-                    .setmNormalColor(mNormalColor)
-                    .setmSelectColor(mSelectColor)
-                    .setPointCheckedChangeListener(new AndSelectCircleView.PointCheckedChangeListener() {
+        mIndicatorView.setVisibility((mIsDisplayIndicator && page > 1) ? View.VISIBLE : View.GONE);
+        if (mIsDisplayIndicator && page > 1) {
+            RelativeLayout.LayoutParams pointParams = (RelativeLayout.LayoutParams) mIndicatorView.getLayoutParams();
+            pointParams.topMargin = mIndicatorMarginTop;
+            pointParams.bottomMargin = mIndicatorMarginBottom;
+            mIndicatorView.setLayoutParams(pointParams);
+            // 设置指示器
+            mIndicatorView
+                    .setChildWidth(mIndicatorChildWidth)
+                    .setChildHeight(mIndicatorChildHeight)
+                    .setChildMargin(mIndicatorChildMargin)
+                    .setIsCircle(mIndicatorChildIsCircle)
+                    .setNormalColor(mIndicatorChildNormalColor)
+                    .setSelectColor(mIndicatorChildSelectColor)
+                    .setPointCheckedChangeListener(new IndicatorView.PointCheckedChangeListener() {
                         @Override
                         public void checkedChange(int position) {
                             if (position >= 0 && position < page) {
                                 // 指示点点击，滚动到对应的页
-                                linearLayoutManager.scrollToPositionWithOffset(position, 0);
+                                mLinearLayoutManager.scrollToPositionWithOffset(position, 0);
                             }
                         }
                     })
@@ -510,8 +506,8 @@ public class GridViewPager extends FrameLayout {
         // 设置背景图片
         if (backgroundImageLoaderInterface != null) {
             RelativeLayout.LayoutParams bgImageViewRl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, getAllHeight());
-            bgImageView.setLayoutParams(bgImageViewRl);
-            backgroundImageLoaderInterface.setBackgroundImg(bgImageView);
+            mIvBg.setLayoutParams(bgImageViewRl);
+            backgroundImageLoaderInterface.setBackgroundImg(mIvBg);
         }
 
         // 设置数据
@@ -520,16 +516,18 @@ public class GridViewPager extends FrameLayout {
 
     /**
      * 获取总页数
+     *
      * @return
      */
     private int getTotalPageCount() {
         // 每页数据大小
-        pageSize = rowCount * columnCount;
-        return dataAllCount / pageSize + (dataAllCount % pageSize > 0 ? 1 : 0);
+        mPageSize = mRowCount * mColCount;
+        return mDataAllCount / mPageSize + (mDataAllCount % mPageSize > 0 ? 1 : 0);
     }
 
     /**
      * 动态计算view高度
+     *
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */
@@ -538,13 +536,8 @@ public class GridViewPager extends FrameLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         // 获取宽-测量规则的模式和大小
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        // 获取高-测量规则的模式和大小
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         // 设置wrap_content的默认宽 / 高值
-        // 默认宽/高的设定并无固定依据,根据需要灵活设置
-        // 类似TextView,ImageView等针对wrap_content均在onMeasure()对设置默认宽 / 高值有特殊处理,具体读者可以自行查看
-
-         if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+        if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT) {
             setMeasuredDimension(widthSize, getAllHeight());
         }
     }
@@ -559,21 +552,25 @@ public class GridViewPager extends FrameLayout {
         for (int i = 0; i < page; i++) {
             stringList.add(i + "");
         }
-        if (pagerAdapter == null) {
-            pagerAdapter = new GridViewPagerAdapter(R.layout.gridpager_item_layout, stringList);
-            recyclerView.setAdapter(pagerAdapter);
+        GridViewPagerAdapter.ParamsBean bean = new GridViewPagerAdapter.ParamsBean();
+        bean.setColCount(mColCount);
+        bean.setDataAllCount(mDataAllCount);
+        bean.setIconHeight(mIconHeight);
+        bean.setIconWidth(mIconWidth);
+        bean.setPageSize(mPageSize);
+        bean.setTextColor(mTextColor);
+        bean.setTextIconMargin(mTextIconMargin);
+        bean.setTextSize(mTextSize);
+        bean.setImageLoaderCallback(mImageTextLoaderInterface);
+        bean.setItemClickListener(mGridItemClickListener);
+        if (mPagerAdapter == null) {
+            mPagerAdapter = new GridViewPagerAdapter(getContext());
+            mPagerAdapter.setParamsBean(bean);
+            mRvPage.setAdapter(mPagerAdapter);
+            mPagerAdapter.setNewData(stringList);
         } else {
-            notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * 刷新数据
-     */
-    private void notifyDataSetChanged() {
-        if (pagerAdapter != null) {
-            pagerAdapter.setChanged();
-            pagerAdapter.notifyDataSetChanged();
+            mPagerAdapter.setParamsBean(bean);
+            mPagerAdapter.setNewData(stringList);
         }
     }
 
@@ -584,9 +581,9 @@ public class GridViewPager extends FrameLayout {
      */
     public void notifyItemChanged(int position) {
         // 总页数
-        int page = dataAllCount / pageSize + (dataAllCount % pageSize > 0 ? 1 : 0);
-        if (position >= 0 && position < page && pagerAdapter != null) {
-            pagerAdapter.notifyItemChanged(position);
+        int page = mDataAllCount / mPageSize + (mDataAllCount % mPageSize > 0 ? 1 : 0);
+        if (position >= 0 && position < page && mPagerAdapter != null) {
+            mPagerAdapter.notifyItemChanged(position);
         }
     }
 
@@ -596,7 +593,7 @@ public class GridViewPager extends FrameLayout {
      * @return
      */
     private int getAutoHeight() {
-        return getOnesHeight() * rowCount + (rowCount - 1) * verticalSpacing;
+        return getOnesHeight() * mRowCount + (mRowCount - 1) * mVerticalSpacing;
     }
 
     /**
@@ -605,7 +602,7 @@ public class GridViewPager extends FrameLayout {
      * @return
      */
     private int getOnesHeight() {
-        return (int) (imageHeight + textImgMargin + textSize * 1.133);
+        return (int) (mIconHeight + mTextIconMargin + mTextSize * 1.133);
     }
 
     /**
@@ -617,101 +614,15 @@ public class GridViewPager extends FrameLayout {
         // 总高
         int page = getTotalPageCount();
         int recycleviewH = getAutoHeight();
-        if (mIsShow && page > 1) {
-            recycleviewH += pagerMarginTop + pagerMarginBottom + pointMarginPage + pointMarginBottom + mChildHeight;
+        if (mIsDisplayIndicator && page > 1) {
+            recycleviewH += mPagerMarginTop + mPagerMarginBottom + mIndicatorMarginTop + mIndicatorMarginBottom + mIndicatorChildHeight;
         } else {
-            recycleviewH += pagerMarginTop + pagerMarginBottom;
+            recycleviewH += mPagerMarginTop + mPagerMarginBottom;
         }
         return recycleviewH;
     }
 
-    /**
-     * item点击回调
-     */
-    public interface GridItemClickListener {
-        void click(int position);
-    }
-
-    /**
-     * 图片加载
-     */
-    public interface ImageTextLoaderInterface {
-        void displayImageText(ImageView imageView, TextView textView, int position);
-    }
-
     public interface BackgroundImageLoaderInterface {
         void setBackgroundImg(ImageView bgImageView);
-    }
-
-    /**
-     * adapter
-     */
-    public class GridViewPagerAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-
-        private ViewGroup.LayoutParams layoutParamsMatch;
-        private LinearLayout.LayoutParams imageLp;
-        private LinearLayout.LayoutParams textLp;
-        private int widthPixels;
-
-        public GridViewPagerAdapter(int layoutResId, List<String> data) {
-            super(layoutResId, data);
-            widthPixels = getResources().getDisplayMetrics().widthPixels;
-            setChanged();
-        }
-
-        public void setChanged() {
-            layoutParamsMatch = new ViewGroup.LayoutParams(widthPixels / columnCount, ViewGroup.LayoutParams.WRAP_CONTENT);
-            imageLp = new LinearLayout.LayoutParams(imageWidth, imageHeight);
-            textLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            textLp.topMargin = textImgMargin;
-        }
-
-        @Override
-        protected void convert(@NonNull BaseViewHolder helper, String item) {
-            //
-            final int position = helper.getLayoutPosition();
-            FlexboxLayout flexboxLayout = helper.getView(R.id.flex_layout);
-            flexboxLayout.removeAllViews();
-            // 循环添加每页数据
-            int pageSizeCount = pageSize;
-            // 如果是最后一页，判断最后一页是否够每页的大小
-            if (position == getItemCount() - 1) {
-                pageSizeCount = dataAllCount % pageSize > 0 ? dataAllCount % pageSize : pageSize;
-            }
-            for (int i = 0; i < pageSizeCount; i++) {
-                View view = View.inflate(getContext(), R.layout.gridpager_item, null);
-                LinearLayout layout = view.findViewById(R.id.ll_layout);
-                layout.setLayoutParams(layoutParamsMatch);
-                ImageView imageView = view.findViewById(R.id.item_image);
-                imageView.setLayoutParams(imageLp);
-                TextView textView = view.findViewById(R.id.item_text);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-                textView.setTextColor(textColor);
-                textView.setLayoutParams(textLp);
-                if (imageTextLoaderInterface != null) {
-                    imageTextLoaderInterface.displayImageText(imageView, textView, position * pageSize + i);
-                }
-                layout.setOnClickListener(new myClick(position, i));
-                flexboxLayout.addView(view);
-            }
-
-        }
-
-        private class myClick implements OnClickListener {
-            int position;
-            int pageCount;
-
-            public myClick(int position, int pageCount) {
-                this.position = position;
-                this.pageCount = pageCount;
-            }
-
-            @Override
-            public void onClick(View v) {
-                if (gridItemClickListener != null) {
-                    gridItemClickListener.click(position * pageSize + pageCount);
-                }
-            }
-        }
     }
 }
