@@ -26,7 +26,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING;
 
 /**
- * recycleview的方式来实现美团app的首页标签效果
+ * recycleView的方式来实现美团app的首页标签效果
  */
 public class GridViewPager extends FrameLayout {
 
@@ -131,6 +131,7 @@ public class GridViewPager extends FrameLayout {
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
         mRvPage.setLayoutManager(mLinearLayoutManager);
+        // TODO: 2020-03-23 与pagerSnapHelper冲突
         // 滚动监听
         mRvPage.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -138,16 +139,16 @@ public class GridViewPager extends FrameLayout {
                 super.onScrollStateChanged(recyclerView, newState);
                 switch (newState) {
                     case SCROLL_STATE_IDLE:
-                        // recyclerview已经停止滚动
+                        // recyclerView已经停止滚动
                         // 设置指示点
                         int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
                         mIndicatorView.setSelectPosition(firstVisibleItem);
                         break;
                     case SCROLL_STATE_DRAGGING:
-                        // recyclerview正在被拖拽
+                        // recyclerView正在被拖拽
                         break;
                     case SCROLL_STATE_SETTLING:
-                        // recyclerview正在依靠惯性滚动
+                        // recyclerView正在依靠惯性滚动
                         break;
                 }
             }
@@ -157,7 +158,7 @@ public class GridViewPager extends FrameLayout {
     /**
      * 初始化参数
      *
-     * @param attrs
+     * @param attrs 布局参数
      */
     private void handleTypedArray(AttributeSet attrs) {
         if (attrs == null) {
@@ -193,8 +194,8 @@ public class GridViewPager extends FrameLayout {
      * 设置数据总数
      * 并同时计算行数，不大于设置的行数
      *
-     * @param mDataAllCount
-     * @return
+     * @param mDataAllCount 数据总数
+     * @return 当前view
      */
     public GridViewPager setDataAllCount(int mDataAllCount) {
         if (mDataAllCount > 0) {
@@ -216,8 +217,8 @@ public class GridViewPager extends FrameLayout {
     /**
      * 设置列数
      *
-     * @param mColCount
-     * @return
+     * @param mColCount 列数
+     * @return 当前view
      */
     public GridViewPager setColCount(int mColCount) {
         if (mColCount > 0) {
@@ -229,8 +230,8 @@ public class GridViewPager extends FrameLayout {
     /**
      * 设置行数
      *
-     * @param mRowCount
-     * @return
+     * @param mRowCount 行数
+     * @return 当前view
      */
     public GridViewPager setRowCount(int mRowCount) {
         if (mRowCount > 0) {
@@ -241,9 +242,8 @@ public class GridViewPager extends FrameLayout {
     }
 
     /**
-     * 上下边距
-     *
-     * @param mPagerMarginTop
+     * 上边距
+     * @param mPagerMarginTop 上间距
      */
     public GridViewPager setPagerMarginTop(int mPagerMarginTop) {
         this.mPagerMarginTop = AndDensityUtils.dip2px(getContext(), mPagerMarginTop);
@@ -613,13 +613,13 @@ public class GridViewPager extends FrameLayout {
     private int getAllHeight() {
         // 总高
         int page = getTotalPageCount();
-        int recycleviewH = getAutoHeight();
+        int recyclerViewH = getAutoHeight();
         if (mIsDisplayIndicator && page > 1) {
-            recycleviewH += mPagerMarginTop + mPagerMarginBottom + mIndicatorMarginTop + mIndicatorMarginBottom + mIndicatorChildHeight;
+            recyclerViewH += mPagerMarginTop + mPagerMarginBottom + mIndicatorMarginTop + mIndicatorMarginBottom + mIndicatorChildHeight;
         } else {
-            recycleviewH += mPagerMarginTop + mPagerMarginBottom;
+            recyclerViewH += mPagerMarginTop + mPagerMarginBottom;
         }
-        return recycleviewH;
+        return recyclerViewH;
     }
 
     public interface BackgroundImageLoaderInterface {
