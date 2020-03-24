@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -16,40 +18,41 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RecyclerView mRecyclerView;
-    private HomeGoldPositionItemAdapter mHomeGoldPositionItemAdapter;
-    private List<HomeGoldPositionItemBean> mHomeGoldPositionItemBeanList = new ArrayList<>();;
-
+    private Button btn1, btn2, btn3, btn4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,HomeGoldPostionSpaceItemDecoration.GRID_NUM);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new HomeGoldPostionSpaceItemDecoration(this));
-        mHomeGoldPositionItemAdapter = new HomeGoldPositionItemAdapter(this);
-        mRecyclerView.setAdapter(mHomeGoldPositionItemAdapter);
-        setData();
+        btn1 = findViewById(R.id.btn1);
+        btn2 = findViewById(R.id.btn2);
+        btn3 = findViewById(R.id.btn3);
+        btn4 = findViewById(R.id.btn4);
+        btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
+        btn4.setOnClickListener(this);
     }
 
-    private void setData() {
-        mHomeGoldPositionItemBeanList.clear();
-        for (int i = 0; i < 20; i++) {
-            HomeGoldPositionItemBean bean = new HomeGoldPositionItemBean( String.valueOf(R.drawable.card_icon_home_gold_all), "条目"+i);
-            mHomeGoldPositionItemBeanList.add(bean);
+    @Override
+    public void onClick(View v) {
+        Class enterPage = OneActivity.class;
+        switch (v.getId()) {
+            case R.id.btn1:
+                enterPage = OneActivity.class;
+                break;
+            case R.id.btn2:
+                enterPage = TwoActivity.class;
+                break;
+            case R.id.btn3:
+                enterPage = ThreeActivity.class;
+                break;
+            case R.id.btn4:
+                enterPage = FourActivity.class;
+                break;
         }
-        mHomeGoldPositionItemAdapter.setNewData(mHomeGoldPositionItemBeanList);
-        mHomeGoldPositionItemAdapter.notifyDataSetChanged();
-        mHomeGoldPositionItemAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                startActivity(new Intent(MainActivity.this, TwoActivity.class));
-            }
-        });
+        startActivity(new Intent(MainActivity.this, enterPage));
     }
 }

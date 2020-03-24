@@ -1,6 +1,7 @@
 package com.luck.horizontalslide.gridpager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,6 @@ import java.util.List;
 public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdapter.ViewHolder> {
 
     private ViewGroup.LayoutParams layoutParamsMatch;
-    private LinearLayout.LayoutParams imageLp;
     private LinearLayout.LayoutParams textLp;
     private int widthPixels;
 
@@ -43,7 +43,6 @@ public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdap
     public void setParamsBean(ParamsBean mParamsBean) {
         this.mParamsBean = mParamsBean;
         layoutParamsMatch = new ViewGroup.LayoutParams(widthPixels / mParamsBean.getColCount(), ViewGroup.LayoutParams.WRAP_CONTENT);
-        imageLp = new LinearLayout.LayoutParams(mParamsBean.getIconWidth(), mParamsBean.getIconHeight());
         textLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textLp.topMargin = mParamsBean.getTextIconMargin();
     }
@@ -69,6 +68,8 @@ public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdap
             LinearLayout layout = view.findViewById(R.id.ll_layout);
             layout.setLayoutParams(layoutParamsMatch);
             ImageView imageView = view.findViewById(R.id.item_image);
+            LinearLayout.LayoutParams imageLp = new LinearLayout.LayoutParams(mParamsBean.getIconWidth(), mParamsBean.getIconHeight());
+            imageLp.topMargin = i < mParamsBean.getColCount() ? 0 : mParamsBean.getItemMarginTop();
             imageView.setLayoutParams(imageLp);
             TextView textView = view.findViewById(R.id.item_text);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mParamsBean.getTextSize());
@@ -77,6 +78,7 @@ public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdap
             if (mParamsBean.getImageLoaderCallback() != null) {
                 mParamsBean.getImageLoaderCallback().displayImageText(imageView, textView, position * mParamsBean.getPageSize() + i);
             }
+
             int finalI = i;
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,6 +132,8 @@ public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdap
         private int mDataAllCount;
         private int mTextSize;
         private int mTextColor;
+        private int mItemMarginTop;
+
         private GridItemClickListener mItemClickListener;
         private ImageTextLoaderCallback mImageLoaderCallback;
 
@@ -139,6 +143,14 @@ public class GridViewPagerAdapter extends RecyclerView.Adapter<GridViewPagerAdap
 
         public void setItemClickListener(GridItemClickListener mItemClickListener) {
             this.mItemClickListener = mItemClickListener;
+        }
+
+        public int getItemMarginTop() {
+            return mItemMarginTop;
+        }
+
+        public void setItemMarginTop(int mItemMarginTop) {
+            this.mItemMarginTop = mItemMarginTop;
         }
 
         public ImageTextLoaderCallback getImageLoaderCallback() {

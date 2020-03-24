@@ -5,14 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="50dp"
+    android:paddingHorizontal="20dp"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <Button
+        android:id="@+id/btn1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
+        android:layout_height="50dp"
+        android:text="方式一"
+        android:layout_marginTop="20dp"
+        android:textColor="#28582E"
+        android:textSize="18sp" />
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="方式二"
+        android:layout_marginTop="20dp"
+        android:textColor="#28582E"
+        android:textSize="18sp" />
+    <Button
+        android:id="@+id/btn3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="方式三"
+        android:layout_marginTop="20dp"
+        android:textColor="#28582E"
+        android:textSize="18sp" />
+    <Button
+        android:id="@+id/btn4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="方式四"
+        android:layout_marginTop="20dp"
+        android:textColor="#28582E"
+        android:textSize="18sp" />
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.luck.horizontalslide;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,22 +12,20 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.luck.horizontalslide.gridpager.GridViewPager;
+import com.luck.horizontalslide.gridpager.GridRecyclerView;
 import com.luck.horizontalslide.gridpager.GridViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * ============================================================
  * 作 者 : 李桐桐
- * 创建日期 ： 2020-03-20 11:29
+ * 创建日期 ： 2020-03-24 10:09
  * 描 述 :
  * ============================================================
  **/
-
-public class ThreeActivity extends Activity implements View.OnClickListener{
+public class FourActivity extends Activity implements View.OnClickListener{
 
     private String[] titles = {"选课", "英语", "数学", "语文", "美术", "分级阅读", "国际游学"};
     private String[] icons = {"http:\\/\\/k12static.xdf.cn\\/wxbackend\\/banner\\/20200313\\/decac1cc67842f2df3bd4d83128cc9da.png",
@@ -41,14 +38,14 @@ public class ThreeActivity extends Activity implements View.OnClickListener{
     };
 
     private List<HomeGoldPositionItemBean> mHomeGoldPositionItemBeanList = new ArrayList<>();
-    private  GridViewPager gridViewPager;
+    private GridRecyclerView gridViewPager;
     private int itemCount = 43;
     private Button btn1, btn2, btn3, btn4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_three);
+        setContentView(R.layout.activity_four);
         gridViewPager = findViewById(R.id.gridviewpager);
         btn1 = findViewById(R.id.btu_one_line);
         btn2 = findViewById(R.id.btu_two_line);
@@ -82,7 +79,6 @@ public class ThreeActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void itemClick(int position) {
                         Toast.makeText(getBaseContext(), "点击了" + mHomeGoldPositionItemBeanList.get(position).getText() + position, Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ThreeActivity.this, FourActivity.class));
                     }
                 })
                 .show();
@@ -123,4 +119,3 @@ public class ThreeActivity extends Activity implements View.OnClickListener{
         }
     }
 }
-

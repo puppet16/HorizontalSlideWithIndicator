@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <com.luck.horizontalslide.gridpager.GridRecyclerView
+        android:id="@+id/gridviewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:page_backgroundColor="@color/gray"
+        app:page_colCount="5"
+        app:page_rowCount="2"
+        app:page_imgHeight="44dp"
+        app:page_imgWidth="44dp"
+        app:page_imgTextMargin="5dp"
+        app:pager_marginBottom="16dp"
+        app:pager_marginTop="16dp"
+        app:indicator_isCircle="false"
+        app:indicator_isDisplay="true"
+        app:indicator_childMargin="2dp"
+        app:indicator_marginBottom="10dp"
+        app:indicator_marginTop="10dp"
+        app:indicator_normalColor="@android:color/white"
+        app:indicator_selectColor="#f00"
+        app:indicator_childHeight="2dp"
+        app:indicator_childWidth="15dp"
+        app:page_textColor="#464646"
+        app:page_textSize="12sp"
+        app:page_verticalSpacing="10dp" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btu_refresh_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据变多" />
+
+    <Button
+        android:id="@+id/btu_refresh_less"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据变少" />
+
+    <Button
+        android:id="@+id/btu_one_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据只有一行" />
+
+    <Button
+        android:id="@+id/btu_two_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="刷新数据有两行" />
+</LinearLayout>
